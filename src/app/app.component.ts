@@ -1,3 +1,5 @@
+// tslint:disable: typedef
+// tslint:disable: radix
 import { Component } from '@angular/core';
 
 @Component({
@@ -14,6 +16,10 @@ export class AppComponent {
 
   onChangeLength(value: string) {
     const parsedValue = parseInt(value);
+
+    if (!isNaN(parsedValue)) {
+      this.length = parseInt(value);
+    }
   }
 
   onChangeUseLetters() {
@@ -28,10 +34,28 @@ export class AppComponent {
     this.includeSymbols = !this.includeSymbols;
   }
 
-  onButtonCLick() {
-    console.log(this.includeLetters);
-    console.log(this.includeNumbers);
-    console.log(this.includeSymbols);
-    this.password = 'My Password!!!';
+  onButtonClick() {
+    const numbers = '1234567890';
+    const letters = 'abcdefghijklmnopqrstuvwyz';
+    const symbols = '!@#$%^&*()';
+
+    let validChars = '';
+    if (this.includeLetters) {
+      validChars += letters;
+    }
+    if (this.includeNumbers) {
+      validChars += numbers;
+    }
+    if (this.includeSymbols) {
+      validChars += symbols;
+    }
+
+    let generatedPassword = '';
+    // tslint:disable-next-line: prefer-for-of
+    for (let i = 0; i < this.length; i++) {
+      const index = Math.floor(Math.random() * validChars.length);
+      generatedPassword += validChars[index];
+    }
+    this.password = generatedPassword;
   }
 }
